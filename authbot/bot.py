@@ -107,4 +107,18 @@ async def run_in_room(
 
     while True:
         jid = await workqueue.get()
-        await lookup_and_adjust(muc_client, room_address, disco_client, jid)
+        try:
+            await lookup_and_adjust(muc_client, room_address, disco_client,
+                                    jid)
+        except asyncio.CancelledError:
+            raise
+        except aioxmpp.errors.XMPPError as exc:
+            logger.error(
+                "error while updating affiliation of %s: %s",
+                jid, exc,
+            )
+        except Exception:
+            logger.exception(
+                "failed to process user %s; ignoring.",
+                jid,
+            )
