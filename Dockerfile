@@ -11,6 +11,11 @@ RUN set -eu; \
     pip3 install 'environ-config~=20.1'; \
     rm -rf ~/.cache;
 
+RUN set -eu; \
+    useradd -m authbot -u 50814
+
+USER 50814
+
 COPY authbot /opt/authbot/authbot
 
 WORKDIR /opt/authbot
