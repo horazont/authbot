@@ -18,6 +18,11 @@ def on_join(workqueue, member, **kwargs):
                      member.nick, member.affiliation)
         return
 
+    if member.direct_jid is None:
+        logger.error("could not discover real JID of %s!",
+                     member.nick)
+        return
+
     workqueue.put_nowait(member.direct_jid)
 
 
