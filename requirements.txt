@@ -1,0 +1,2 @@
+environ-config~=20.1
+aioxmpp~=0.12
