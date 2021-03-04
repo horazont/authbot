@@ -100,14 +100,8 @@ async def run_in_room(
         room_address,
         nickname,
     )
-
     workqueue = asyncio.Queue(1024)
-
-    def connect_join_signal(*args, **kwargs) -> bool:
-        room.on_join.connect(functools.partial(on_join, workqueue))
-        return True
-
-    room.on_enter.connect(connect_join_signal)
+    room.on_join.connect(functools.partial(on_join, workqueue))
     await join_fut
     logger.info("joined %s as %s", room_address, nickname)
 
