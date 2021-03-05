@@ -70,6 +70,7 @@ async def lookup_and_adjust(service, room_address, disco_client, address):
         domain,
         require_fresh=True,
         no_cache=True,
+        timeout=60,
     )
     contact_info = extract_contact_form(info)
     if contact_info is None:
