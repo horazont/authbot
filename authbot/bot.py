@@ -75,7 +75,8 @@ async def lookup_and_adjust(service, room_address, disco_client, address):
     contact_info = extract_contact_form(info)
     if contact_info is None:
         logger.debug("%s has no contact info published, "
-                     "not granting anything")
+                     "not granting anything",
+                     domain)
         return
 
     addresses = list(extract_relevant_addresses(contact_info))
