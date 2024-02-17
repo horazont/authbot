@@ -66,12 +66,21 @@ async def lookup_and_adjust(service, room_address, disco_client, address):
     logger.debug("checking whether %s should have member affiliation",
                  address)
     domain = address.replace(localpart=None, resource=None)
-    info = await disco_client.query_info(
-        domain,
-        require_fresh=True,
-        no_cache=True,
-        timeout=60,
-    )
+    try:
+        info = await disco_client.query_info(
+            domain,
+            require_fresh=True,
+            no_cache=True,
+            timeout=60,
+        )
+    except aioxmpp.errors.XMPPError as exc:
+        logger.error("failed to lookup contact info of %s (%s)",
+                     domain, exc)
+        return
+    except TimeoutError:
+        logger.error("failed to contact %s (timeout)", domain)
+        return
+
     contact_info = extract_contact_form(info)
     if contact_info is None:
         logger.debug("%s has no contact info published, "
@@ -118,8 +127,6 @@ async def run_in_room(
         try:
             await lookup_and_adjust(muc_client, room_address, disco_client,
                                     jid)
-        except asyncio.CancelledError:
-            raise
         except aioxmpp.errors.XMPPError as exc:
             logger.error(
                 "error while updating affiliation of %s: %s",
