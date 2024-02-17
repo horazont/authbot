@@ -32,6 +32,7 @@ async def amain() -> int:
             1: logging.WARNING,
             2: logging.INFO,
         }.get(config.lib_log_level, logging.DEBUG),
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
     )
     logging.getLogger("authbot").setLevel({
         0: logging.ERROR,
