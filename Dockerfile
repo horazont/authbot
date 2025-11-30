@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookworm-slim
 
 RUN set -eu; \
     export DEBIAN_FRONTEND=noninteractive; \
@@ -8,7 +8,7 @@ RUN set -eu; \
     rm -rf /var/cache/apt/lists/*
 
 RUN set -eu; \
-    pip3 install 'environ-config~=20.1'; \
+    pip3 install --break-system-packages 'environ-config~=20.1'; \
     rm -rf ~/.cache;
 
 RUN set -eu; \
